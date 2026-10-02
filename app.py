@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request
-from transformers import pipeline
+import os
+from huggingface_hub import InferenceClient
 
 app = Flask(__name__)
 
-summarizer = pipeline(
-    "summarization",
-    model="t5-small"
+client = InferenceClient(
+    token=os.environ.get("HF_TOKEN")
 )
 
 @app.route("/", methods=["GET", "POST"])
@@ -24,18 +24,15 @@ def home():
         original_count = len(text.split())
 
         # Generate summary
-        result = summarizer(
-            "summarize: " + text,
-            max_length=80,
-            min_length=10,
-            do_sample=False
+        result = client.summarization(
+            text,
+            model="facebook/bart-large-cnn"
         )
 
-        summary = result[0]["summary_text"]
+        summary = result.summary_text
 
         summary_count = len(summary.split())
 
-        # Calculate reduction
         if original_count > 0:
             reduction = round(
                 ((original_count - summary_count) / original_count) * 100,
@@ -43,14 +40,12 @@ def home():
             )
 
         # Generate key points
-        point_result = summarizer(
-            "summarize: " + text,
-            max_length=50,
-            min_length=15,
-            do_sample=False
+        point_result = client.summarization(
+            text,
+            model="facebook/bart-large-cnn"
         )
 
-        points_text = point_result[0]["summary_text"]
+        points_text = point_result.summary_text
 
         key_points = [
             point.strip()
@@ -69,4 +64,4 @@ def home():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
