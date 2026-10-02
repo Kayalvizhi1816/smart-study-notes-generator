@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Study Notes Generator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #222;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2563eb;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 17px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            resize: vertical;
+            font-size: 16px;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #2563eb;
+        }
+
+        button {
+            margin-top: 18px;
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        h2 {
+            color: #2563eb;
+            margin-bottom: 12px;
+        }
+
+        .result {
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 25px;
+        }
+
+        ul {
+            margin-left: 25px;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 25px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .stat {
+            background: #f4f7fb;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .stat strong {
+            display: block;
+            color: #2563eb;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .stat span {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #888;
+            margin-top: 25px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>📚 Smart Study Notes Generator</h1>
+        <p>Transform lengthy paragraphs into simple study notes using AI</p>
+    </div>
+
+    <div class="card">
+
+        <form method="POST">
+
+            <label>Enter Your Paragraph</label>
+
+            <textarea
+                name="text"
+                placeholder="Paste your study material or paragraph here..."
+                required></textarea>
+
+            <button type="submit">
+                ✨ Generate Summary
+            </button>
+
+        </form>
+
+    </div>
+
+    {% if summary %}
+
+    <div class="card">
+
+        <h2>📝 Summary</h2>
+
+        <p class="result">{{ summary }}</p>
+
+        <h2>🔑 Key Points</h2>
+
+        <ul>
+            {% for point in key_points %}
+                <li>{{ point }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>📊 Text Statistics</h2>
+
+        <div class="stats">
+
+            <div class="stat">
+                <strong>{{ original_count }}</strong>
+                <span>Original Words</span>
+            </div>
+
+            <div class="stat">
+                <strong>{{ summary_count }}</strong>
+                <span>Summary Words</span>
+            </div>
+
+            <div class="stat">
+                <strong>{{ reduction }}%</strong>
+                <span>Text Reduction</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <div class="footer">
+        <p>Powered by Python, Flask & Hugging Face Transformers</p>
+    </div>
+
+</div>
+
+</body>
+</html>
